@@ -1,25 +1,24 @@
 import azure.functions as func
-import logging
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
-@app.route(route="http_trigger")
-def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+#Primeira função para receber um json e trabalhar em cima dele
+@app.route(route="receiver")    
+def error_receiver(req: func.HttpRequest) -> func.HttpResponse:
 
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
-
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
+    try:
+        erro = req.get_json()
+    except:
         return func.HttpResponse(
-             "Modificação em tempo real funciona???",
-             status_code=200
+            status_code=333
         )
+
+    error = erro['error']
+    action = erro['action']
+
+    return func.HttpResponse(
+        f"seu erro foi {error}",
+        status_code=200
+    )
+
+
