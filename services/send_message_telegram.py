@@ -8,7 +8,7 @@ token = os.environ.get("TELEGRAM_TOKEN")
 chat_id = os.environ.get("TELEGRAM_CHAT_ID")
 
 
-def send_message(novo_erro: Alerta) -> int:
+def send_message(novo_erro: Alerta) -> str:
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     payload = {
     "chat_id": chat_id,
@@ -20,5 +20,5 @@ def send_message(novo_erro: Alerta) -> int:
     logging.info(r.status_code)
     logging.info(r.text)
 
-    return r.status_code
+    return "Mensagem enviada ao plantonista com sucesso"
 

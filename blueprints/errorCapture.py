@@ -4,6 +4,7 @@ from services.request_gpt import chamarOpenAi
 import logging
 from services.send_message_telegram import send_message
 from models.alerta import Alerta
+from services.table_storage import save_alerta
 
 bp = func.Blueprint()
 
@@ -29,12 +30,13 @@ def get_error(req: func.HttpRequest) -> func.HttpResponse:
     )
     
     mensagem_retorno = ""
-    if(send_message(novo_erro) == 200):
-        mensagem_retorno="Mensagem enviada com sucesso ao plantonista"
-    else:
-        mensagem_retorno="Problema no envio da mensagem ao plantonistaß"
+    
+    #logging.info(novo_erro)
+    resultadoDoSalvamento = save_alerta(novo_erro)
+    
+    resultadoDoEnvioTelegram = send_message(novo_erro)
 
     return func.HttpResponse(
-        mensagem_retorno,
+        f"{resultadoDoSalvamento}\n{resultadoDoEnvioTelegram}",
         status_code=200
     )
