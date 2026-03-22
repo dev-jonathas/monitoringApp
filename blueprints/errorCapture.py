@@ -3,6 +3,7 @@ import json
 from services.request_gpt import chamarOpenAi
 import logging
 from services.send_message_telegram import send_message
+from models.alerta import Alerta
 
 bp = func.Blueprint()
 
@@ -18,12 +19,17 @@ def get_error(req: func.HttpRequest) -> func.HttpResponse:
             "Your body isn't a valid JSON. Get better loser", status_code=400
         )
 
-    
-
     resultado = chamarOpenAi(newError)
+
+    novo_erro = Alerta(
+        error_id=newError['error'],
+        description=newError['description'],
+        action=newError['action'],
+        overview=resultado
+    )
     
     mensagem_retorno = ""
-    if(send_message(resultado) == 200):
+    if(send_message(novo_erro) == 200):
         mensagem_retorno="Mensagem enviada com sucesso ao telegram"
     else:
         mensagem_retorno="Problema no envio da mensagem ao telegram"
