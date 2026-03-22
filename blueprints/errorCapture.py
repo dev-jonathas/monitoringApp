@@ -30,9 +30,9 @@ def get_error(req: func.HttpRequest) -> func.HttpResponse:
     
     mensagem_retorno = ""
     if(send_message(novo_erro) == 200):
-        mensagem_retorno="Mensagem enviada com sucesso ao telegram"
+        mensagem_retorno="Mensagem enviada com sucesso ao plantonista"
     else:
-        mensagem_retorno="Problema no envio da mensagem ao telegram"
+        mensagem_retorno="Problema no envio da mensagem ao plantonistaß"
 
     return func.HttpResponse(
         mensagem_retorno,
